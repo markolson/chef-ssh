@@ -1,4 +1,4 @@
-actions :create
+actions :create, :destroy
 default_action :create
 
 attribute :host,    :kind_of => String, :name_attribute => true

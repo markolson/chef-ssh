@@ -6,14 +6,14 @@ class Chef
         filename = File.basename(default)
         ssh_path = nil
         if (new_resource.user && !new_resource.path)
-          ssh_path = "/home/#{new_resource.user}/.ssh/#{filename}"
+          ssh_path = "/home/#{new_resource.user}/.ssh/#{filename.gsub('ssh_','')}"
         elsif new_resource.path
           ssh_path = new_resource.path
         else
           ssh_path = default
         end
 
-        directory "Creating #{ssh_path} for #{ssh_user}" do
+        directory "Creating #{::File.dirname(ssh_path)} for #{ssh_user}" do
           owner ssh_user
           mode '0700'
           recursive true

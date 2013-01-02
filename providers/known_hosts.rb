@@ -30,5 +30,6 @@ action :delete do
   execute "remove known_host entry for #{new_resource.host}" do
     command "ssh-keygen -R #{Shellwords.escape(new_resource.host)}"
     user ssh_user
+    umask '0600'
   end
 end
