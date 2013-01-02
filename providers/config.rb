@@ -1,5 +1,5 @@
 include Chef::SSH::PathHelpers
-action :create do
+action :add do
   ssh_user = new_resource.user || 'root'
   known_hosts_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
 
@@ -8,7 +8,7 @@ action :create do
 
 end
 
-action :destroy do
+action :remove do
   ssh_user = new_resource.user || 'root'
   known_hosts_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
 

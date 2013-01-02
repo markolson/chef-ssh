@@ -1,9 +1,7 @@
 require 'shellwords'
-
 include Chef::SSH::PathHelpers
 
-
-action :create do
+action :add do
   ssh_user = new_resource.user || 'root'
   known_hosts_path = default_or_user_path(node['ssh']['known_hosts_path'], ssh_user)
 
@@ -25,7 +23,7 @@ action :create do
   end
 end
 
-action :delete do
+action :remove do
   known_hosts_path = node['ssh']['known_hosts_path']
   execute "remove known_host entry for #{new_resource.host}" do
     command "ssh-keygen -R #{Shellwords.escape(new_resource.host)}"
