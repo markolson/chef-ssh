@@ -24,7 +24,8 @@ action :add do
 end
 
 action :remove do
-  known_hosts_path = node['ssh']['known_hosts_path']
+  ssh_user = new_resource.user || 'root'
+  known_hosts_path = default_or_user_path(node['ssh']['known_hosts_path'], ssh_user)
   execute "remove known_host entry for #{new_resource.host}" do
     command "ssh-keygen -R #{Shellwords.escape(new_resource.host)}"
     user ssh_user
