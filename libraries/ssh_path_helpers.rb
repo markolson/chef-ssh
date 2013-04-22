@@ -6,7 +6,8 @@ class Chef
         filename = File.basename(default)
         ssh_path = nil
         if (new_resource.user && !new_resource.path)
-          ssh_path = "/home/#{new_resource.user}/.ssh/#{filename.gsub('ssh_','')}"
+	  prefix = new_resource.user == "root" ? "" : "/home"
+          ssh_path = "#{prefix}/#{new_resource.user}/.ssh/#{filename.gsub('ssh_','')}"
         elsif new_resource.path
           ssh_path = new_resource.path
         else
