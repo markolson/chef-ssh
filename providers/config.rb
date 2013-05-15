@@ -1,18 +1,18 @@
 include Chef::SSH::PathHelpers
 action :add do
   ssh_user = new_resource.user || 'root'
-  known_hosts_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
+  ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
 
-  remove_entry(known_hosts_path, ssh_user)
-  add_entry(known_hosts_path, ssh_user)
-
+  remove_entry(ssh_config_path, ssh_user)
+  add_entry(ssh_config_path, ssh_user)
+  set_rights_proper(ssh_config_path, ssh_user)
 end
 
 action :remove do
   ssh_user = new_resource.user || 'root'
-  known_hosts_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
+  ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
 
-  remove_entry(known_hosts_path, ssh_user)
+  remove_entry(ssh_config_path, ssh_user)
 end
 
 def remove_entry(config_file, ssh_user)
@@ -41,3 +41,13 @@ def config_fragment
   x += "#End Chef SSH for #{new_resource.host.strip}\n"
   return x
 end
+
+def set_rights_proper(config_file, ssh_user)
+  file "#{config_file}" do
+    owner ssh_user
+    group ssh_user
+    mode "0600"
+    action :create
+  end
+end
+
