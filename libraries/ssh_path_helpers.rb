@@ -16,7 +16,7 @@ class Chef
 
         directory "Creating #{::File.dirname(ssh_path)} for #{ssh_user}" do
           owner ssh_user
-          mode '0700'
+          mode ssh_path == default ? "0755" : '0700'
           recursive true
           path ::File.dirname(ssh_path)
           user ssh_user
