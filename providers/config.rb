@@ -36,7 +36,7 @@ end
 def config_fragment
   x = "Host #{new_resource.host.strip}\n"
   new_resource.options.each {|key, value|
-    x += "  #{key} #{value.strip}\n"
+    x += "  #{key} #{value.to_s.strip}\n"
   }
   x += "#End Chef SSH for #{new_resource.host.strip}\n"
   return x
