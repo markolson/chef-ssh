@@ -1,3 +1,4 @@
+name             "ssh"
 maintainer       "Mark Olson"
 maintainer_email "theothermarkolson@gmail.com"
 license          "Apache 2.0"
