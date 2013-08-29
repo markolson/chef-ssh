@@ -1,5 +1,9 @@
 # CHANGELOG for ssh
 
+## 0.6.4
+
+* Use OHAI to determine the user's $HOME (Tom Duckering)
+
 ## 0.6.3:
 
 * Fixed libary to make /root instead of /home/root work (Vincent Gijsen)
