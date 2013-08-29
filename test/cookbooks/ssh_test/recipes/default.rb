@@ -20,15 +20,19 @@ ssh_config "github.com" do
   user 'vagrant'
 end
 
+ohai "reload_passwd" do
+  action :nothing
+  plugin "passwd"
+end
 
 user "faked" do
   comment "Not A Real Person"
   uid 1000
-  gid "users"
   system true
   home "/tmp/bitty"
   shell "/bin/zsh"
   password "weeeeeeeeeeeee"
+  notifies :reload, "ohai[reload_passwd]", :immediately
 end
 
 ssh_known_hosts "github.com" do
