@@ -18,7 +18,7 @@ action :add do
     user ssh_user
   end
 
-  log "An entry for #{new_resource.host} already exists in #{known_hosts_path}." do
+  Chef::Log.debug "An entry for #{new_resource.host} already exists in #{known_hosts_path}." do
     only_if "ssh-keygen -H -F #{Shellwords.escape(new_resource.host)} -f #{known_hosts_path} | grep 'Host #{new_resource.host} found'"
   end
 end
