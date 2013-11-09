@@ -31,4 +31,8 @@ describe_recipe 'ssh::default' do
     file("/tmp/bitty/.ssh/known_hosts").must_include 'github.com'
   end
 
+  it "creates a 'faked' known_hosts entry for a host with specified port" do
+    file("/tmp/bitty/.ssh/known_hosts").must_include 'gitlab.com'
+  end
+
 end
