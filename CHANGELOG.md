@@ -1,5 +1,9 @@
 # CHANGELOG for ssh
 
+## 0.6.5
+
+* Add an option for the ssh port number to known_hosts (Scott Arthur)
+
 ## 0.6.4
 
 * Use OHAI to determine the user's $HOME (Tom Duckering)
