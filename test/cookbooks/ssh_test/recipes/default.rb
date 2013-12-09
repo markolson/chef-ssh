@@ -44,3 +44,8 @@ ssh_config "github.com" do
   options 'User' => 'git', 'IdentityFile' => '/tmp/gh'
   user 'faked'
 end
+
+ssh_known_hosts "gitlab.com:22" do
+  hashed false
+  user 'faked'
+end
