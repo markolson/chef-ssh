@@ -6,7 +6,7 @@ action :add do
   known_hosts_path = default_or_user_path(node['ssh']['known_hosts_path'], ssh_user)
   host, port = new_resource.host.split(':')
   # set the port to the default (22) if it wasn't already set
-  port = new_resource.port unless port 
+  port = new_resource.port unless port
 
   key = new_resource.key
   if key.nil?
