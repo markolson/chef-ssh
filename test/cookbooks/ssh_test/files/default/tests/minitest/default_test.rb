@@ -1,5 +1,5 @@
 require 'minitest/spec'
- 
+
 describe_recipe 'ssh::default' do
   it "creates a 'root' config" do
     file("/root/.ssh/config").must_exist.with(:mode, "600").with(:owner, "root")
