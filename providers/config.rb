@@ -3,8 +3,9 @@ action :add do
   ssh_user = new_resource.user || 'root'
   ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
 
-  regex = config_fragment.gsub(/\n\s+/,'\s+')
-  unless %x(egrep -e '#{regex}' #{ssh_config_path})
+  regex = config_fragment.gsub(/\n\s*/,'\s*')
+  egrep = %x(ruby -e 'puts IO.readlines("#{ssh_config_path}").join("").match(%r|(#{regex})|)[0]')
+  if egrep == ''
 	  remove_entry(ssh_config_path, ssh_user)
 	  add_entry(ssh_config_path, ssh_user)
 	  set_rights_proper(ssh_config_path, ssh_user)
