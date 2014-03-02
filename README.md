@@ -2,7 +2,7 @@
 
 ## Description
 
-Provides 2 LWRPs to manage system-wide and per-user `ssh_config` and `known_host` files.
+Provides 2 LWRPs to manage system-wide and per-user `ssh_config` and `known_host` files. And one LWRP to provide per-user `authorized_keys` files.
 
 ## Usage
 
@@ -90,6 +90,47 @@ An important thing to note is that if you create a user during a chef run, be su
       user 'webapp'
     end
 
+### authorized\_keys
+
+Add authorized keys for users. Currently only adding keys to authorized\_keys
+files works. Removing keys may come in the future.
+
+#### Attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Attribute</th><th>Description</th><th>Default Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key_identifier</td>
+      <td>
+        <b>Name attribute:</b> the identifier for the key inside the authorized_keys file
+      </td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
+      <td>key</td>
+      <td>A key to add to the file. 'ssh-rsa &lt;hex&gt;' or 'ssh-dsa &lt;hex&gt;'
+      </td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
+      <td>user</td>
+      <td>A username to add the `authorized_keys` entry for. If unspecified, 'root' is assumed.
+      </td>
+      <td><code>root</code></td>
+    </tr>
+    <tr>
+      <td>path</td>
+      <td>A full path to a authorized_keys file. If used with the `user` attribute, this will take precedence over the path to a user's file, but the file will be created (if necessary) as that user.
+      </td>
+      <td><code>%HOME/.ssh/authorized_keys</code></td>
+    </tr>
+  </tbody>
+</table>
 
 ### config
 
