@@ -15,10 +15,10 @@ class Chef
           ssh_path = default
         end
 
-        directory "Creating #{::File.dirname(ssh_path)} for #{ssh_user}" do
+        directory ::File.dirname(ssh_path) do
           owner ssh_user
           group(pwent.gid) unless pwent.nil?
-          mode ssh_path == default ? "0755" : '0700'
+          mode ssh_path == default ? 00755 : 00700
           recursive true
           path ::File.dirname(ssh_path)
           user ssh_user

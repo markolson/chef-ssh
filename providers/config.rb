@@ -5,11 +5,11 @@ action :add do
 
   regex = config_fragment.gsub(/\n\s*/,'\s*')
   egrep = %x(ruby -e 'puts IO.readlines("#{ssh_config_path}").join("").match(%r|(#{regex})|)[0]')
-  if egrep == ''
+  if egrep.empty?
 	  remove_entry(ssh_config_path, ssh_user)
-	  add_entry(ssh_config_path, ssh_user)
-	  set_rights_proper(ssh_config_path, ssh_user)
+	  add_entry(ssh_config_path, ssh_user)	  
   end
+  set_rights_proper(ssh_config_path, ssh_user)
 end
 
 action :remove do
@@ -50,8 +50,8 @@ def set_rights_proper(config_file, ssh_user)
   pwent = get_pwent_for(ssh_user)
   ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
   file "#{config_file}" do
-    owner "#{pwent.uid}"
-    group "#{pwent.gid}"
+    owner pwent.uid
+    group pwent.gid
     mode(ssh_config_path == node['ssh']['config_path'] ? 00644 : 00600)
     action :create
   end
