@@ -1,12 +1,14 @@
 class Chef
   module SSH
     module PathHelpers
+      require 'etc'
 
       def default_or_user_path(default, ssh_user)
         filename = File.basename(default)
         ssh_path = nil
         if (new_resource.user && !new_resource.path)
-          ssh_path = "#{node['etc']['passwd'][new_resource.user]['dir']}/.ssh/#{filename.gsub('ssh_','')}"
+          pwent = get_pwent_for(new_resource.user)
+          ssh_path = "#{pwent.dir}/.ssh/#{filename.gsub('ssh_','')}"
         elsif new_resource.path
           ssh_path = new_resource.path
         else
@@ -15,6 +17,7 @@ class Chef
 
         directory "Creating #{::File.dirname(ssh_path)} for #{ssh_user}" do
           owner ssh_user
+          group(pwent.gid) unless pwent.nil?
           mode ssh_path == default ? "0755" : '0700'
           recursive true
           path ::File.dirname(ssh_path)
@@ -23,6 +26,11 @@ class Chef
 
         return ssh_path
       end
+
+      def get_pwent_for(uid)
+        uid.is_a?(Fixnum) ? Etc.getpwuid(uid) : Etc.getpwnam(uid)
+      end
+
     end
   end
 end
