@@ -138,14 +138,14 @@ An important thing to note is that if you create a user during a chef run, be su
     </tr>
     <tr>
       <td>user</td>
-      <td>A username to add the `ssh_config` entry for. If unspecified, the known_host will be added system-wide. <b>Note:</b> if specified, the user
+      <td>A username to add the `ssh_config` entry for. If unspecified, the entry will be added system-wide. <b>Note:</b> if specified, the user
         must already exist.
       </td>
       <td><code>nil</code></td>
     </tr>
     <tr>
       <td>path</td>
-      <td>A full path to a known_hosts file. If used with the `user` attribute, this will take precedence over the path to a user's file, but the file will be created (if necessary) as that user.
+      <td>A full path to a ssh config file. If used with the `user` attribute, this will take precedence over the path to a user's file, but the file will be created (if necessary) as that user.
       </td>
       <td><code>nil</code></td>
     </tr>
