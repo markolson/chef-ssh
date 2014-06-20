@@ -3,8 +3,12 @@ action :add do
   ssh_user = new_resource.user || 'root'
   ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
 
-  remove_entry(ssh_config_path, ssh_user)
-  add_entry(ssh_config_path, ssh_user)
+  regex = config_fragment.gsub(/\n\s*/,'\s*')
+  egrep = %x(ruby -e 'puts IO.readlines("#{ssh_config_path}").join("").match(%r|(#{regex})|)[0]')
+  if egrep.empty?
+	  remove_entry(ssh_config_path, ssh_user)
+	  add_entry(ssh_config_path, ssh_user)	  
+  end
   set_rights_proper(ssh_config_path, ssh_user)
 end
 
@@ -43,11 +47,12 @@ def config_fragment
 end
 
 def set_rights_proper(config_file, ssh_user)
+  pwent = get_pwent_for(ssh_user)
+  ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
   file "#{config_file}" do
-    owner ssh_user
-    group ssh_user
-    mode "0600"
+    owner pwent.uid
+    group pwent.gid
+    mode(ssh_config_path == node['ssh']['config_path'] ? 00644 : 00600)
     action :create
   end
 end
-
