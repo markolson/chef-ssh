@@ -35,4 +35,20 @@ describe_recipe 'ssh::default' do
     file("/tmp/bitty/.ssh/known_hosts").must_include 'gitlab.com'
   end
 
+  it 'creates an authorized_keys file for root' do
+    file('/root/.ssh/authorized_keys').must_exist.with(:owner, 'root')
+    file('/root/.ssh/authorized_keys').must_include 'root@default-ubuntu-1204.vagrantup.com'
+    file('/root/.ssh/authorized_keys').must_include 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ'
+  end
+
+  it 'updates the authorized_keys file for vagrant' do
+    file('/home/vagrant/.ssh/authorized_keys').must_exist.with(:owner, 'vagrant')
+    file('/home/vagrant/.ssh/authorized_keys').must_include 'root@default-ubuntu-1204.vagrantup.com'
+    file('/home/vagrant/.ssh/authorized_keys').must_include 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ'
+  end
+
+  it 'updates the authorized_keys for for vagrant a second time' do
+    file('/home/vagrant/.ssh/authorized_keys').must_include 'root2@default-ubuntu-1204.vagrantup.com'
+    file('/home/vagrant/.ssh/authorized_keys').must_include 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVYvDSDGEAwM80s8j8O'
+  end
 end
