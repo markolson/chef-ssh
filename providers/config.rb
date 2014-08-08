@@ -17,10 +17,10 @@ end
 
 def remove_entry(config_file, ssh_user)
   execute "remove #{new_resource.host} from #{config_file}" do
-    command "ruby -e 'x =  $<.read; x.gsub!(/^[\n]{0,1}Host #{new_resource.host.strip}.*#End Chef SSH for #{new_resource.host.strip}\n/m,\"\"); puts x' #{config_file} > #{config_file}.new && mv #{config_file}.new #{config_file}"
+    command "ruby -e 'x =  $<.read; x.gsub!(/^[\n]{0,1}Host #{Regexp.escape(new_resource.host.strip)}.*#End Chef SSH for #{Regexp.escape(new_resource.host.strip)}\n/m,\"\"); puts x' #{config_file} > #{config_file}.new && mv #{config_file}.new #{config_file}"
     user ssh_user
     group ssh_user
-    only_if "grep \"#{new_resource.host}\" #{config_file}"
+    only_if "grep \"#{Regexp.escape(new_resource.host)}\" #{config_file}"
   end
 end
 
