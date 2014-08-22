@@ -15,11 +15,12 @@ action :add do
     key = results.strip
   end
 
-  execute "add known_host entry for #{host}" do
+  x = execute "add known_host entry for #{host}" do
     not_if "ssh-keygen -H -F #{Shellwords.escape(host)} -f #{known_hosts_path} | grep 'Host #{host} found'"
     command "echo '#{key}' >> #{known_hosts_path}"
     user ssh_user
   end
+  new_resource.updated_by_last_action(x.updated_by_last_action?)
 
   log "entry_for_#{host}_exists" do
     message "An entry for #{host} already exists in #{known_hosts_path}."
@@ -31,9 +32,10 @@ end
 action :remove do
   ssh_user = new_resource.user || 'root'
   known_hosts_path = default_or_user_path(node['ssh']['known_hosts_path'], ssh_user)
-  execute "remove known_host entry for #{new_resource.host}" do
+  x = execute "remove known_host entry for #{new_resource.host}" do
     command "ssh-keygen -R #{Shellwords.escape(new_resource.host)}"
     user ssh_user
     umask '0600'
   end
+  new_resource.updated_by_last_action(x.updated_by_last_action?)
 end
