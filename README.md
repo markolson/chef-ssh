@@ -154,7 +154,7 @@ An important thing to note is that if you create a user during a chef run, be su
 
 #### Example
 
-    ssh_config "github.com" do
+    ssh_util_config 'github.com' do
       options 'User' => 'git', 'IdentityFile' => '/var/apps/github_deploy_key'
       user 'webapp'
     end
