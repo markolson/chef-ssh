@@ -29,7 +29,7 @@ def add_entry(config_file, ssh_user)
     command "echo '#{config_fragment}' >> #{config_file}"
     user ssh_user
     group ssh_user
-    umask 600
+    umask "0022"
   end
 end
 
