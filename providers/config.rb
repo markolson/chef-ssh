@@ -1,55 +1,61 @@
-include Chef::SSH::PathHelpers
-action :add do
-  ssh_user = new_resource.user || 'root'
-  ssh_group = new_resource.group || ssh_user
-  ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
+include Chef::SSH::ConfigHelpers
 
-  remove_entry(ssh_config_path, ssh_user, ssh_group)
-  add_entry(ssh_config_path, ssh_user, ssh_group)
-  set_rights_proper(ssh_config_path, ssh_user, ssh_group)
+use_inline_resources
+
+def whyrun_supported?
+  true
+end
+
+action :add do
+  return if @new_resource.options.eql? @existing_entries[new_resource.name]
+  @existing_entries[@new_resource.name] = @new_resource.options
+
+  converge_by "Adding {@new_resource.name} to #{@path} with #{new_resource.options.inspect}" do
+    create_directory
+    create_file
+  end
+end
+
+action :add_if_missing do
+  action_add unless @current_resource.exists?
 end
 
 action :remove do
-  ssh_user = new_resource.user || 'root'
-  ssh_group = new_resource.group || ssh_user
-  ssh_config_path = default_or_user_path(node['ssh']['config_path'], ssh_user)
+  return unless @current_resource.exists?
+  @existing_entries.delete @new_resource.name
 
-  remove_entry(ssh_config_path, ssh_user)
-end
-
-def remove_entry(config_file, ssh_user, ssh_group)
-  execute "remove #{new_resource.host} from #{config_file}" do
-    command "ruby -e 'x =  $<.read; x.gsub!(/^[\n]{0,1}Host #{Regexp.escape(new_resource.host.strip)}.*#End Chef SSH for #{Regexp.escape(new_resource.host.strip)}\n/m,\"\"); puts x' #{config_file} > #{config_file}.new && mv #{config_file}.new #{config_file}"
-    user ssh_user
-    group ssh_group
-    only_if "grep \"#{Regexp.escape(new_resource.host)}\" #{config_file}"
+  converge_by "Remove #{@new_resource.name} from #{@path}" do
+    create_file
   end
 end
 
-def add_entry(config_file, ssh_user, ssh_group)
-  execute "add #{new_resource.host} to #{config_file}" do
-    command "echo '#{config_fragment}' >> #{config_file}"
-    user ssh_user
-    group ssh_group
-    umask 600
+def create_directory
+  directory "Creating #{::File.dirname(@path)} for #{@user}" do
+    owner     @user
+    group     @group if @group
+    mode      default?(@path) ? 00755 : 00700
+    path      ::File.dirname(@path)
+    recursive true
   end
 end
 
-def config_fragment
-  x = "Host #{new_resource.host.strip}\n"
-  new_resource.options.each {|key, value|
-    x += "  #{key} #{value.to_s.strip}\n"
-  }
-  x += "#End Chef SSH for #{new_resource.host.strip}\n"
-  return x
+def create_file
+  existing_entries = @existing_entries
+  file @path do
+    user    @user if @user
+    group   @group if @group
+    mode    default?(@path) ? 00644 : 00600
+    content "# Created by Chef for #{node.name}\n\n#{to_config(existing_entries)}"
+  end
 end
 
-def set_rights_proper(config_file, ssh_user, ssh_group)
-  file "#{config_file}" do
-    owner ssh_user
-    group ssh_group
-    mode "0600"
-    action :create
-  end
+def load_current_resource
+  @user = new_resource.user || 'root'
+  @group = new_resource.group || pwent_for(@user).gid
+  @path = new_resource.path || default_or_user_path(new_resource.user)
+  @existing_entries = parse_file @path
+
+  @current_resource = Chef::Resource::SshConfig.new(@new_resource.name)
+  @current_resource.exists = @existing_entries.key? @new_resource.name
 end
 

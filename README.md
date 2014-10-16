@@ -6,13 +6,16 @@ Provides 2 LWRPs to manage system-wide and per-user `ssh_config` and `known_host
 
 ## Usage
 
-When using SSH with Chef deployments, it's crucial to not get any prompts for input. Adding entries to `known_hosts` files and better managing your per-connection configuration can help with this. 
+When using SSH with Chef deployments, it's crucial to not get any prompts for input. Adding entries to `known_hosts` files and better managing your per-connection configuration can help with this.
 
 An important thing to note is that if you create a user during a chef run, be sure to reload OHAI data so that the new user will be in the node data. For instance:
 
     ohai "reload_passwd" do
         plugin "passwd"
     end
+
+The ssh cookbook bypasses this need somewhat by using ohai classes directly to discover your users' ssh paths.  However
+some of your cookbooks may not be as generous.
 
 ## Resources and Providers
 
