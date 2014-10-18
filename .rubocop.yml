@@ -16,3 +16,5 @@ MethodLength:
   Severity: refactor
 SingleSpaceBeforeFirstArg:
   Enabled: false
+Documentation:
+  Enabled: false

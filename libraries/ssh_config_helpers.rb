@@ -4,13 +4,8 @@ include Chef::SSH::Helpers
 class Chef
   module SSH
     module ConfigHelpers
-
       def default_or_user_path(username = nil)
-        if username
-          user_dir(username)
-        else
-          ssh_path = node['ssh']['config_path']
-        end
+        username ? "#{user_dir(username)}/.ssh/config" : node['ssh']['config_path']
       end
 
       def default?(path)
@@ -38,11 +33,11 @@ class Chef
       def to_config(existing_entries)
         existing_entries.map do |name, options|
           if options
-            body = options.map{ |key, value| "  #{key} #{value}" }.join("\n")
+            body = options.map { |key, value| "  #{key} #{value}" }.join("\n")
           else
             body = ''
           end
-          [ "Host #{name}", body ].join("\n")
+          ["Host #{name}", body].join("\n")
         end.join("\n\n") + "\n"
       end
     end

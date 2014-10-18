@@ -2,7 +2,6 @@ class Chef
   module SSH
     module Helpers
       require 'etc'
-
       def user_dir(username)
         pwent = pwent_for(username)
         pwent.dir
@@ -14,4 +13,3 @@ class Chef
     end
   end
 end
-

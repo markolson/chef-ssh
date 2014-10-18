@@ -30,23 +30,20 @@ action :remove do
 end
 
 def create_directory
-  directory "Creating #{::File.dirname(@path)} for #{@user}" do
-    owner     @user
-    group     @group if @group
-    mode      default?(@path) ? 00755 : 00700
-    path      ::File.dirname(@path)
-    recursive true
-  end
+  d = directory ::File.dirname(@path)
+  d.owner     @user
+  d.group     @group if @group
+  d.mode      default?(@path) ? 00755 : 00700
+  d.path      ::File.dirname(@path)
+  d.recursive true
 end
 
 def create_file
-  existing_entries = @existing_entries
-  file @path do
-    user    @user if @user
-    group   @group if @group
-    mode    default?(@path) ? 00644 : 00600
-    content "# Created by Chef for #{node.name}\n\n#{to_config(existing_entries)}"
-  end
+  f = file @path
+  f.owner   @user if @user
+  f.group   @group if @group
+  f.mode    default?(@path) ? 00644 : 00600
+  f.content "# Created by Chef for #{node.name}\n\n#{to_config(@existing_entries)}"
 end
 
 def load_current_resource
@@ -58,4 +55,3 @@ def load_current_resource
   @current_resource = Chef::Resource::SshConfig.new(@new_resource.name)
   @current_resource.exists = @existing_entries.key? @new_resource.name
 end
-

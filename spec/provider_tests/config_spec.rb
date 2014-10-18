@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "ssh_config resource" do
+describe 'ssh_config resource' do
 
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(:step_into => :ssh_config)
@@ -8,11 +8,11 @@ describe "ssh_config resource" do
   end
 
   let(:default_config) { '/etc/ssh/ssh_config' }
-  let(:vagrant_config) { '/home/vagrant' }
+  let(:vagrant_config) { '/home/vagrant/.ssh/config' }
 
   let(:test_user) { 'someone' }
   let(:test_group) { 'other_group' }
-  let(:test_config) { '/some/random/path' }
+  let(:test_config) { '/some/random/path/config' }
 
   let(:partial_start) do
     content = []
@@ -54,7 +54,7 @@ describe "ssh_config resource" do
 
   let(:test_end) do
     content = []
-    content << 'Host github.com'
+    content << 'Host test.io'
     content << '  User testuser'
     content << '  DummyKey I was allowed'
     content << ''
@@ -77,6 +77,7 @@ describe "ssh_config resource" do
     allow(IO).to receive(:foreach)
     allow(IO).to partial_start.reduce(receive(:foreach).with(vagrant_config), :and_yield)
     allow(IO).to partial_start.reduce(receive(:foreach).with(default_config), :and_yield)
+    allow(IO).to partial_start.reduce(receive(:foreach).with(test_config), :and_yield)
 
     allow(Etc).to receive(:getpwnam)
     allow(Etc).to receive(:getpwnam).with('vagrant').and_return(
@@ -160,6 +161,58 @@ describe "ssh_config resource" do
     partial_start.each_with_index do |line, index|
       found_one = true if line.match(/^\s*[H|h]ost/) && !partial_start[index].empty?
       break if found_one
+    end
+  end
+
+  it 'can create user ssh configs' do
+    expect(chef_run).to create_file(vagrant_config).with(
+      :owner => 'vagrant',
+      :group => 200,
+      :mode => 00600
+    ).with_content(
+      (common_end + github_and_partial_end).join("\n")
+    )
+  end
+
+  it 'can create the global ssh config' do
+    expect(chef_run).to create_file(default_config).with(
+      :owner => 'root',
+      :group => 0,
+      :mode => 00644
+    ).with_content(
+      (common_end + github_and_partial_end).join("\n")
+    )
+  end
+
+  it 'creates the /etc/ssh directory if it is missing' do
+    expect(chef_run).to create_directory(::File.dirname(default_config)).with(
+      :owner => 'root',
+      :group => 0,
+      :mode => 00755
+    )
+  end
+
+  it "creates vagrant's ~/.ssh/config file" do
+    expect(chef_run).to create_directory(::File.dirname(vagrant_config)).with(
+      :owner => 'vagrant',
+      :group => 200,
+      :mode => 00700
+    )
+  end
+
+  context 'when non-default attributes are used' do
+    it 'can handle a custom path' do
+      expect(chef_run).to render_file(test_config).with_content(
+        (common_end + test_and_partial_end).join("\n")
+      )
+    end
+
+    it 'can handle a custom owner and group for the config file' do
+      expect(chef_run).to create_file(test_config).with(
+        :owner => test_user,
+        :group => test_group,
+        :mode => 00600
+      )
     end
   end
 end
