@@ -215,4 +215,23 @@ describe 'ssh_config resource' do
       )
     end
   end
+
+  it 'can handle files with comments in them' do
+    content = []
+    content << '# this is a comment line'
+    content += partial_start
+    allow(IO).to content.reduce(receive(:foreach).with(default_config), :and_yield)
+
+    expect(chef_run).to render_file(default_config).with_content(
+      (common_end + github_and_partial_end).join("\n")
+    )
+  end
+
+  it 'does not duplicate entries' do
+    allow(IO).to github_and_partial_end.reduce(receive(:foreach).with(vagrant_config), :and_yield)
+
+    expect(chef_run).to render_file(default_config).with_content(
+      (common_end + github_and_partial_end).join("\n")
+    )
+  end
 end

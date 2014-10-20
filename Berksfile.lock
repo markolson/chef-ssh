@@ -6,6 +6,6 @@ DEPENDENCIES
     path: test/cookbooks/ssh_test
 
 GRAPH
-  ssh (0.6.6)
+  ssh (0.10.0)
   ssh_test (0.2.0)
     ssh (>= 0.0.0)
