@@ -5,7 +5,13 @@ This file is used to list changes made in each version of the ssh_test cookbook.
 
 0.1.0
 -----
-- [your_name] - Initial release of ssh_test
+- Initial release of ssh_test
+
+0.2.0
+-----
+- Broke default.rb into config.rb and known_hosts.rb and cleaned it up to support chefspec tests.
+
+
 
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.

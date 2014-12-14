@@ -1,19 +1,11 @@
-{
-  "sources": {
-    "ssh": {
-      "path": "."
-    },
-    "minitest-handler": {
-      "locked_version": "0.2.1"
-    },
-    "ssh_test": {
-      "path": "./test/cookbooks/ssh_test"
-    },
-    "chef_handler": {
-      "locked_version": "1.1.4"
-    },
-    "ohai": {
-      "locked_version": "1.0.2"
-    }
-  }
-}
+DEPENDENCIES
+  ssh
+    path: .
+    metadata: true
+  ssh_test
+    path: test/cookbooks/ssh_test
+
+GRAPH
+  ssh (0.10.0)
+  ssh_test (0.2.0)
+    ssh (>= 0.0.0)

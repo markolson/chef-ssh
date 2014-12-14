@@ -1,4 +1,7 @@
+source "https://supermarket.getchef.com"
+
 metadata
 
-cookbook "minitest-handler"
-cookbook "ssh_test", :path => "./test/cookbooks/ssh_test"
+group :test do
+  cookbook "ssh_test", :path => "./test/cookbooks/ssh_test"
+end

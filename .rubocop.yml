@@ -1,0 +1,20 @@
+AlignParameters:
+  Enabled: false
+ClassAndModuleChildren:
+  Enabled: false
+Encoding:
+  Enabled: false
+LineLength:
+  Max: 120
+  Severity: refactor
+HashSyntax:
+  EnforcedStyle: hash_rockets
+ClassLength:
+  Enabled: false
+MethodLength:
+  Max: 25
+  Severity: refactor
+SingleSpaceBeforeFirstArg:
+  Enabled: false
+Documentation:
+  Enabled: false

@@ -1,5 +1,5 @@
 require 'shellwords'
-include Chef::SSH::PathHelpers
+include Chef::SSH::Helpers
 
 action :add do
   ssh_user = new_resource.user || 'root'
