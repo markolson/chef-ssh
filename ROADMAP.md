@@ -13,6 +13,12 @@ v0.10.1
 ==========
 * add foodcritic support
 
+v1.0
+=========
+* Switch to MWRP using poise
+* Rename some actions and attributes
+  * known_hosts.key becomes known_hosts.entry
+THIS WILL BREAK stuff
 
 Eventually (PRs are VERY welcome)
 ===========

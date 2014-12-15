@@ -7,12 +7,13 @@ def whyrun_supported?
 end
 
 action :add do
-  return if @new_resource.options.eql? @existing_entries[new_resource.name]
-  @existing_entries[@new_resource.name] = @new_resource.options
+  unless @new_resource.options.eql? @existing_entries[new_resource.name]
+    @existing_entries[@new_resource.name] = @new_resource.options
 
-  converge_by "Adding {@new_resource.name} to #{@path} with #{new_resource.options.inspect}" do
-    create_directory
-    create_file
+    converge_by "Adding {@new_resource.name} to #{@path} with #{new_resource.options.inspect}" do
+      create_directory
+      create_file
+    end
   end
 end
 
@@ -21,11 +22,12 @@ action :add_if_missing do
 end
 
 action :remove do
-  return unless @current_resource.exists?
-  @existing_entries.delete @new_resource.name
+  if @current_resource.exists?
+    @existing_entries.delete @new_resource.name
 
-  converge_by "Remove #{@new_resource.name} from #{@path}" do
-    create_file
+    converge_by "Remove #{@new_resource.name} from #{@path}" do
+      create_file
+    end
   end
 end
 
@@ -48,7 +50,7 @@ end
 
 def load_current_resource
   @user = new_resource.user || 'root'
-  @group = new_resource.group || pwent_for(@user).gid
+  @group = new_resource.group || user_group(@user)
   @path = new_resource.path || default_or_user_path(new_resource.user)
   @existing_entries = parse_file @path
 
