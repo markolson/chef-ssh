@@ -11,6 +11,9 @@ ssh_config 'github.com' do
   user 'vagrant'
 end
 
+group 'other_group'
+user 'someone'
+
 ssh_config 'test.io' do
   options 'User' => 'testuser', 'DummyKey' => 'I was allowed'
   user  'someone'

@@ -9,7 +9,3 @@ RSpec.configure do |config|
 end
 
 ChefSpec::Coverage.start!
-
-def recieve_foreach_and_yield(an_array)
-  an_array.reduce(default_content(:array), :and_yield)
-end
