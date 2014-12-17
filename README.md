@@ -4,6 +4,16 @@
 
 Provides 2 LWRPs to manage system-wide and per-user `ssh_config` and `known_host` files.
 
+## Setup
+
+Include the `ssh` cookbook via Berkshelf or Librarian.
+
+    cookbook "ssh"
+
+Or add the following line to your cookbook's `metadata.rb`.
+
+    depends "ssh"
+
 ## Usage
 
 When using SSH with Chef deployments, it's crucial to not get any prompts for input. Adding entries to `known_hosts` files and better managing your per-connection configuration can help with this.
