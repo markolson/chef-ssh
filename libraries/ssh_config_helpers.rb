@@ -19,7 +19,7 @@ class Chef
         IO.foreach(path) do |line|
           next if line.match(/^\s*(#|\r?\n|\s*$)/) # skip lines with only comments or whitespace
 
-          matchdata = line.match(/^\s*([h|H]ost)(.*$)/)
+          matchdata = line.match(/^\s*([h|H]ost\s+)(.*$)/)
           if matchdata
             name = matchdata.captures[1].strip
             entries[name] = {}

@@ -21,6 +21,7 @@ describe 'ssh_config resource' do
     content << 'and_also_with=equal sign'
     content << 'Host second with extra patterns'
     content << '  Extra_spaces    did_not_matter'
+    content << '  HostName option is correctly matched'
     content << '  Multiple_words not a problem'
     content << '  We "can handle quotes"'
   end
@@ -39,6 +40,7 @@ describe 'ssh_config resource' do
     content << ''
     content << 'Host second with extra patterns'
     content << '  Extra_spaces did_not_matter'
+    content << '  HostName option is correctly matched'
     content << '  Multiple_words not a problem'
     content << '  We "can handle quotes"'
     content << ''
