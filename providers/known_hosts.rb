@@ -34,12 +34,11 @@ action :add do
 end
 
 action :remove do
-  if @current_resource.exists?
-    execute "remove known_host entry for #{new_resource.host}" do
-      command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
-      user    new_resource.user if new_resource.user
-      umask   new_resource.user ? 0077 : 0022
-    end
+  execute "remove known_host entry for #{new_resource.host}" do
+    command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
+    user    new_resource.user if new_resource.user
+    umask   new_resource.user ? 0077 : 0022
+    only_if @current_resource.exists?
   end
 end
 

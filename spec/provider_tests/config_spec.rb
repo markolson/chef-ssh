@@ -81,7 +81,7 @@ describe 'ssh_config resource' do
     allow(IO).to partial_start.reduce(receive(:foreach).with(default_config), :and_yield)
     allow(IO).to partial_start.reduce(receive(:foreach).with(test_config), :and_yield)
 
-    allow(Etc).to receive(:getpwnam)
+    allow(Etc).to receive(:getpwnam).and_return("error")
     allow(Etc).to receive(:getpwnam).with('vagrant').and_return(
       Struct.new(:gid, :dir).new(200, '/home/vagrant')
     )
