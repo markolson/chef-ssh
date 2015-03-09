@@ -67,7 +67,8 @@ def load_key_if_needed
   return if new_resource.action.is_a?(Array) ? new_resource.action.include?(:remove) : new_resource.action == :remove
 
   keyscan = Mixlib::ShellOut.new(
-    "ssh-keyscan #{new_resource.hashed ? '-H ' : ''} -p #{new_resource.port.to_i} #{Shellwords.escape(new_resource.host)}"
+    "ssh-keyscan #{new_resource.hashed ? '-H ' : ''} "\
+    "-p #{new_resource.port.to_i} #{Shellwords.escape(new_resource.host)}"
   )
   keyscan.run_command
   keyscan.error! # this will raise an error if the command failed for any reason.

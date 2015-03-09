@@ -19,19 +19,12 @@ class Chef
         IO.foreach(path) do |line|
           next if line.match(/^\s*(#|\r?\n|\s*$)/) # skip lines with only comments or whitespace
 
-          matchdata = line.match(/^\s*([h|H]ost\s+)(.*$)/)
-          if matchdata
-            name = matchdata.captures[1].strip
-            entries[name] = {}
-            next
-          end
+          check_name = parse_name(line)
+          next if check_name && (name = check_name) && (entries[name] = {})
 
-          matchdata = line.match(/^\s*(\w+)(.*$)/)
-          unless matchdata
-            Chef::Log.error("Line |#{line}| does not parse correctly")
-            next
-          end
-          entries[name][matchdata.captures[0]] = matchdata.captures[1].strip
+          key, entry = parse_line(line)
+          next unless entry
+          entries[name][key] = entry
         end
         entries
       end
@@ -45,6 +38,19 @@ class Chef
           end
           ["Host #{name}", body].join("\n")
         end.join("\n\n") + "\n"
+      end
+
+      def parse_name(line)
+        matchdata = line.match(/^\s*([h|H]ost\s+)(.*$)/)
+        matchdata ? matchdata.captures[1].strip : false
+      end
+
+      def parse_line(line)
+        matchdata = line.match(/^\s*(\w+)(.*$)/)
+        return matchdata.captures[0], matchdata.captures[1].strip if matchdata
+
+        Chef::Log.error("Line |#{line}| does not parse correctly")
+        return nil, nil
       end
     end
   end

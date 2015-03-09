@@ -3,7 +3,7 @@ driver:
   name: vagrant
 
 driver_config:
-  require_chef_omnibus: true
+  require_chef_omnibus: '11.16.4'
   box: opscode-ubuntu-12.04
   box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
 

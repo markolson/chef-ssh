@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'ssh_config resource' do
-
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(:step_into => :ssh_config)
     runner.converge('ssh_test::config')
@@ -81,7 +80,12 @@ describe 'ssh_config resource' do
     allow(IO).to partial_start.reduce(receive(:foreach).with(default_config), :and_yield)
     allow(IO).to partial_start.reduce(receive(:foreach).with(test_config), :and_yield)
 
-    allow(Etc).to receive(:getpwnam)
+    allow(Etc).to receive(:getgrgid).and_raise(Exception.new('This should not happen'))
+    allow(Etc).to receive(:getgrgid).with(200).and_return(Struct.new(:name).new('vagrant'))
+    allow(Etc).to receive(:getgrgid).with(100).and_return(Struct.new(:name).new('someone'))
+    allow(Etc).to receive(:getgrgid).with(0).and_return(Struct.new(:name).new('root'))
+
+    allow(Etc).to receive(:getpwnam).and_raise(Exception.new('This should not happen'))
     allow(Etc).to receive(:getpwnam).with('vagrant').and_return(
       Struct.new(:gid, :dir).new(200, '/home/vagrant')
     )
@@ -169,7 +173,7 @@ describe 'ssh_config resource' do
   it 'can create user ssh configs' do
     expect(chef_run).to create_file(vagrant_config).with(
       :owner => 'vagrant',
-      :group => 200,
+      :group => 'vagrant',
       :mode => 00600
     ).with_content(
       (common_end + github_and_partial_end).join("\n")
@@ -179,7 +183,7 @@ describe 'ssh_config resource' do
   it 'can create the global ssh config' do
     expect(chef_run).to create_file(default_config).with(
       :owner => 'root',
-      :group => 0,
+      :group => 'root',
       :mode => 00644
     ).with_content(
       (common_end + github_and_partial_end).join("\n")
@@ -189,7 +193,7 @@ describe 'ssh_config resource' do
   it 'creates the /etc/ssh directory if it is missing' do
     expect(chef_run).to create_directory(::File.dirname(default_config)).with(
       :owner => 'root',
-      :group => 0,
+      :group => 'root',
       :mode => 00755
     )
   end
@@ -197,7 +201,7 @@ describe 'ssh_config resource' do
   it "creates vagrant's ~/.ssh/config file" do
     expect(chef_run).to create_directory(::File.dirname(vagrant_config)).with(
       :owner => 'vagrant',
-      :group => 200,
+      :group => 'vagrant',
       :mode => 00700
     )
   end
