@@ -1,4 +1,11 @@
 # CHANGELOG for ssh
+## 0.10.2
+* Update the README
+* Fix some spec tests
+* Fix bug in `config` that did not allow `HostName` directive
+
+## 0.10.0
+* MAJOR rewrite, but no breaking changes known of.
 
 ## 0.6.5
 

@@ -47,9 +47,8 @@ class Chef
 
       def parse_line(line)
         matchdata = line.match(/^\s*(\w+)(.*$)/)
-        if matchdata
-          return matchdata.captures[0], matchdata.captures[1].strip
-        end
+        return matchdata.captures[0], matchdata.captures[1].strip if matchdata
+
         Chef::Log.error("Line |#{line}| does not parse correctly")
         return nil, nil
       end

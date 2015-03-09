@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'ssh_config resource' do
-
   let(:chef_run) do
     runner = ChefSpec::SoloRunner.new(:step_into => :ssh_config)
     runner.converge('ssh_test::known_hosts')
@@ -24,7 +23,5 @@ describe 'ssh_config resource' do
     )
   end
 
-  it 'works' do
-    pending 'I can not think of any spec tests that make sense'
-  end
+  pending 'I can not think of any spec tests that make sense'
 end

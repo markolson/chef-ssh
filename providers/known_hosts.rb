@@ -34,11 +34,12 @@ action :add do
 end
 
 action :remove do
-  execute "remove known_host entry for #{new_resource.host}" do
-    command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
-    user    new_resource.user if new_resource.user
-    umask   new_resource.user ? 0077 : 0022
-    only_if @current_resource.exists?
+  if @current_resource.exists?
+    execute "remove known_host entry for #{new_resource.host}" do
+      command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
+      user    new_resource.user if new_resource.user
+      umask   new_resource.user ? 0077 : 0022
+    end
   end
 end
 
@@ -66,7 +67,8 @@ def load_key_if_needed
   return if new_resource.action.is_a?(Array) ? new_resource.action.include?(:remove) : new_resource.action == :remove
 
   keyscan = Mixlib::ShellOut.new(
-    "ssh-keyscan #{new_resource.hashed ? '-H ' : ''} -p #{new_resource.port.to_i} #{Shellwords.escape(new_resource.host)}"
+    "ssh-keyscan #{new_resource.hashed ? '-H ' : ''} "\
+    "-p #{new_resource.port.to_i} #{Shellwords.escape(new_resource.host)}"
   )
   keyscan.run_command
   keyscan.error! # this will raise an error if the command failed for any reason.
