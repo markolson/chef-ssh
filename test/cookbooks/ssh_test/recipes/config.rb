@@ -14,7 +14,8 @@ end
 group 'other_group'
 user 'someone'
 
-ssh_config 'test.io' do
+ssh_config 'something else' do
+  host 'test.io'
   options 'User' => 'testuser', 'DummyKey' => 'I was allowed'
   user  'someone'
   group 'other_group'
