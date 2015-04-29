@@ -1,4 +1,7 @@
 # CHANGELOG for ssh
+## 0.10.4
+* fix github #39 where we use the resource name rather than host (The name attribute) in the config LWRP
+
 ## 0.10.2
 * Update the README
 * Fix some spec tests

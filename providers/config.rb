@@ -7,10 +7,10 @@ def whyrun_supported?
 end
 
 action :add do
-  unless @new_resource.options.eql? @existing_entries[new_resource.name]
-    @existing_entries[@new_resource.name] = @new_resource.options
+  unless @new_resource.options.eql? @existing_entries[new_resource.host]
+    @existing_entries[@new_resource.host] = @new_resource.options
 
-    converge_by "Adding {@new_resource.name} to #{@path} with #{new_resource.options.inspect}" do
+    converge_by "Adding {@new_resource.host} to #{@path} with #{new_resource.options.inspect}" do
       create_directory
       create_file
     end
@@ -23,9 +23,9 @@ end
 
 action :remove do
   if @current_resource.exists?
-    @existing_entries.delete @new_resource.name
+    @existing_entries.delete @new_resource.host
 
-    converge_by "Remove #{@new_resource.name} from #{@path}" do
+    converge_by "Remove #{@new_resource.host} from #{@path}" do
       create_file
     end
   end
@@ -54,6 +54,6 @@ def load_current_resource
   @path = new_resource.path || default_or_user_path(new_resource.user)
   @existing_entries = parse_file @path
 
-  @current_resource = Chef::Resource::SshConfig.new(@new_resource.name)
-  @current_resource.exists = @existing_entries.key? @new_resource.name
+  @current_resource = Chef::Resource::SshConfig.new(@new_resource.host)
+  @current_resource.exists = @existing_entries.key? @new_resource.host
 end
