@@ -2,6 +2,8 @@
 # Cookbook: ssh
 # Recipe: default.rb
 
-package 'ssh' do
-  action :install
+if node[:platform_faily].include?("debian")
+  package 'ssh' do
+    action :install
+  end
 end
