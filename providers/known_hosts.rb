@@ -34,7 +34,7 @@ action :add do
 end
 
 action :remove do
-  if @current_resource.exists?
+  if @current_resource.exists? # ~FC023
     execute "remove known_host entry for #{new_resource.host}" do
       command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
       user    new_resource.user if new_resource.user
