@@ -1,4 +1,7 @@
 # CHANGELOG for ssh
+## 0.10.6
+* add authorized_keys resource
+
 ## 0.10.5
 * add support for RHEL family
 
