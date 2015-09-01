@@ -15,7 +15,7 @@ class Chef
       def parse_file(path)
         entries = {}
         return entries unless ::File.exist?(path)
-        name = nil?
+        name = nil
         IO.foreach(path) do |line|
           next if line.match(/^\s*(#|\r?\n|\s*$)/) # skip lines with only comments or whitespace
 
@@ -50,7 +50,7 @@ class Chef
         return matchdata.captures[0], matchdata.captures[1].strip if matchdata
 
         Chef::Log.error("Line |#{line}| does not parse correctly")
-        return nil, nil
+        nil
       end
     end
   end

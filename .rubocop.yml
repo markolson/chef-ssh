@@ -1,3 +1,8 @@
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - '.kitchen/**/*'
+
 AlignParameters:
   Enabled: false
 ClassAndModuleChildren:
@@ -16,5 +21,8 @@ MethodLength:
   Severity: refactor
 SingleSpaceBeforeFirstArg:
   Enabled: false
+AbcSize:
+  Enabled: false
 Documentation:
   Enabled: false
+
