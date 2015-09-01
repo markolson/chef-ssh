@@ -1,4 +1,7 @@
 # CHANGELOG for ssh
+## 0.10.8
+* added matchers for authorized_keys
+
 ## 0.10.6
 * add authorized_keys resource
 
