@@ -29,3 +29,6 @@ suites:
   - name: config
     run_list:
       - recipe[ssh_test::config]
+  - name: authorized_keys
+    run_list:
+      - recipe[ssh_test::authorized_keys]
