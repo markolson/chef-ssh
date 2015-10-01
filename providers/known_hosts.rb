@@ -77,7 +77,7 @@ end
 def load_current_resource
   search = Mixlib::ShellOut.new(
     "ssh-keygen -H -F #{Shellwords.escape(new_resource.host)} "\
-    "-f #{new_resource.path} | grep 'Host #{new_resource.host} found'"
+    "-f #{new_resource.path} | grep -F 'Host #{new_resource.host} found'"
   )
   search.run_command
   @current_resource = Chef::Resource::SshKnownHosts.new(@new_resource.name)
