@@ -20,3 +20,9 @@ describe command('ssh-keygen -F github.com -f /home/vagrant/.ssh/known_hosts') d
   its(:stdout) { should include(TestData.github_key.split(' ')[2]) }
   its(:stdout) { should match(/found/) }
 end
+
+describe file('/home/vagrant/.ssh/known_hosts') do
+  it { should be_file }
+  its(:content) { should match(/\[dummy6\]\:234 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwDBTE5H\+DpOWUv3CPtOo/) }
+  its(:content) { should_not match(/\[dummy6\]\:234[\s\S]*\[dummy6\]\:234/) }
+end
