@@ -1,4 +1,8 @@
 # CHANGELOG for ssh
+## 0.10.10
+* Fixed default key type for authorized keys
+* Added some basic validation to ssh keys in authorized_keys provider
+
 ## 0.10.8
 * added matchers for authorized_keys
 
