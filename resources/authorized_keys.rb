@@ -3,9 +3,9 @@ default_action :add
 
 attribute :type,
           :kind_of => String,
-          :default => 'id-rsa',
+          :default => 'ssh-rsa',
           :equal_to => [
-            'id-rsa',
+            'ssh-rsa',
             'ecdsa-sha2-nistp256',
             'ecdsa-sha2-nistp384',
             'ecdsa-sha2-nistp521',
@@ -13,7 +13,7 @@ attribute :type,
             'ssh-dss'
           ]
 attribute :options, :kind_of => Hash, :default => {}
-attribute :key, :kind_of => String, :required => true
+attribute :key, :kind_of => String, :required => true, :regex => [/^\S*$/]
 attribute :comment, :kind_of => String
 attribute :user, :kind_of => String, :required => true
 

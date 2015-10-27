@@ -3,7 +3,8 @@
 include_recipe 'ssh'
 
 file '/etc/ssh/ssh_known_hosts' do
-  content "#{::TestData.dummy1_key}\n#{::TestData.dummy2_key}\n"
+  content "#{::TestData.dummy1_key}\n#{::TestData.dummy2_key}\n"\
+          "#{::TestData.dummy6_key}\n"
   action :create
 end
 
@@ -39,4 +40,11 @@ end
 ssh_known_hosts 'dummy4' do
   user   'vagrant'
   action :remove
+end
+
+ssh_known_hosts 'dummy6' do
+  host 'dummy6'
+  port 234
+  user 'vagrant'
+  key ::TestData.dummy6_key
 end

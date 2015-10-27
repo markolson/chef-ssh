@@ -130,7 +130,7 @@ def parse_options(text)
 end
 
 def types
-  %w(id-rsa ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519 ssh-dss)
+  %w(ssh-rsa ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519 ssh-dss)
 end
 
 def validate_type(type, source)
