@@ -12,7 +12,7 @@ class Chef
         File.expand_path(path).eql? File.expand_path(node['ssh']['config_path'])
       end
 
-      def parse_file(path)
+      def parse_file(path) # rubocop:disable Style/CyclomaticComplexity
         entries = {}
         return entries unless ::File.exist?(path)
         name = nil

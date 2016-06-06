@@ -43,4 +43,13 @@ module TestData
     'xTf28m5Etzgf9B+4qUl1oMGsKrq9RQ/W1imSJra1nxE0vWr8+FkIONTxPdhRGOUMSA'\
     'T1r6bfIWpdTFF/uc87EA3LY3LkuDbQHHW4kEv1/b0hHYwWcBLbwWJ8mi3'
   end
+
+  def self.dummy6_key
+    '[dummy6]:234 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwDBTE5H+DpOWUv3CPtOo'\
+    'tliP6GNG//nVBqQkGYYdDp9eOeZUO8cll78UTXZ96AigoRNIHp/NvZNY+6IOblNGEA'\
+    'ZxxF4tW9hy9X57IQvRaRTQaAUoT9QWGHtwejsYQozL6mDtx9/TQpfWrUhBWWEUCJyr'\
+    'bLcnS6jtstieKlyEDM4gJmNyKy+Af7kigfWRF5EzBUYAJbQHSjKG8u8NQnvKFSup0o'\
+    'xTf28m5Etzgf9B+4qUl1oMGsKrq9RQ/W1imSJra1nxE0vWr8+FkIONTxPdhRGOUMSA'\
+    'T1r6bfIWpdTFF/uc87EA3LY3LkuDbQHHW4kEv1/b0hHYwWcBLbwWJ8mi3'
+  end
 end

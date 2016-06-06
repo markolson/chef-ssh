@@ -18,4 +18,17 @@ if defined?(ChefSpec)
   def remove_ssh_known_hosts(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:ssh_known_hosts, :remove, resource_name)
   end
+
+  ChefSpec.define_matcher :ssh_authorized_keys
+  def add_authorized_keys(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:ssh_authorized_keys, :add, resource_name)
+  end
+
+  def remove_ssh_authorized_keys(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:ssh_authorized_keys, :remove, resource_name)
+  end
+
+  def update_ssh_authorized_keys(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:ssh_authorized_keys, :update, resource_name)
+  end
 end

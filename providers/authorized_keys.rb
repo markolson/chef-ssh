@@ -52,19 +52,14 @@ end
 
 def format_lines
   @lines.collect do |line|
-    joined = ''
-    if line[:options]
-      joined << line[:options].collect do |key, value|
-        if value.nil? || value.empty?
-          key.to_s
-        elsif value.include?(' ') && !value.include?('"')
-          "#{key}=\"#{value}\""
-        else
-          "#{key}=#{value}"
-        end
+    if line[:options].nil?
+      joined = ''
+    else
+      joined = line[:options].collect do |key, value|
+        (value.nil? || value.empty?) ? key.to_s : "#{key}=\"#{value}\""
       end.join(',')
-      joined << ' '
     end
+    joined << ' ' unless joined.empty?
     joined << line[:type] << ' ' << line[:key]
     line[:comment] && (joined << ' ' << line[:comment])
     joined
@@ -92,45 +87,31 @@ protected
 def parse(current)
   current.reduce([]) do |memo, row|
     line = {}
-    fields = extract_fields(row)
+    # split on whitespace that is not inside of quotes
+    fields = row.split(/(?!\B"[^"]*)\s(?![^"]*"\B)/)
     line[:options] = parse_options(fields.shift) unless types.include? fields[0]
     validate_type(fields[0], @path)
     line[:type] = fields[0]
     line[:key] = fields[1]
-    line[:comment] = fields[2..-1].join(' ') if row[2]
+    line[:comment] = fields[2..-1].join(' ') if fields[2]
     memo << line
   end
 end
 
-def extract_fields(row)
-  return :comment => row if row.empty? || row[0] == '#'
-
-  quotes = 0
-  fields = []
-  row.scan(/\S+/) do |match|
-    if quotes.even? || quotes == 0
-      fields << match
-    else
-      fields[-1] << " #{match}"
-    end
-    quotes += match.count('"')
-  end
-  fields
-end
-
 def parse_options(text)
   options = {}
-  split = text.split(',')
+  # split on commas that are not inside quotes
+  split = text.split(/(?!\B"[^"]*),(?![^"]*"\B)/)
   split.each do |group|
     validate_options(group, @path)
     group = group.split('=')
-    options[group[0]] = group[1]
+    options[group[0]] = group[1].nil? ? nil : group[1].gsub(/\A"|"\Z/, '')
   end
   options
 end
 
 def types
-  %w(id-rsa ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519 ssh-dss)
+  @types ||= %w(ssh-rsa ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519 ssh-dss)
 end
 
 def validate_type(type, source)
@@ -142,16 +123,22 @@ def validate_options(option, source)
   if option.is_a? Hash
     option.each { |o| validate_options o, source }
     return
-  elsif option.is_a? String
-    option = option.split('=')
   end
-
-  binary_options = %w(cert-authority no-agent-forwarding no-port-forwarding no-pty no-user-rc no-X11-forwarding)
-  other_options = %w(command environment from permitopen principals tunnel)
+  option = option.split('=') if option.is_a? String
 
   if option[1].nil? || option[1].empty?
-    fail "Invalid Option in #{source}: #{option}" unless binary_options.include? option[0].to_s
+    validate_binary_option option[0]
   else
-    fail "Invalid Option in #{source}: #{option}" unless other_options.include? option[0].to_s
+    validate_valued_option option[0]
   end
+end
+
+def validate_binary_option(option)
+  @binary_options ||= %w(cert-authority no-agent-forwarding no-port-forwarding no-pty no-user-rc no-X11-forwarding)
+  fail "Invalid Option in #{source}: #{option}" unless @binary_options.include? option.to_s
+end
+
+def validate_valued_option(option)
+  @other_options ||= %w(command environment from permitopen principals tunnel)
+  fail "Invalid Option in #{source}: #{option}" unless @other_options.include? option.to_s
 end

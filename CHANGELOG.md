@@ -1,4 +1,15 @@
 # CHANGELOG for ssh
+## 0.10.12
+* Updated authorized_keys to allow for commas, quotes, and spaces inside the options.
+* fixed a bug that was adding a single space to the end of entries.
+
+## 0.10.10
+* Fixed default key type for authorized keys
+* Added some basic validation to ssh keys in authorized_keys provider
+
+## 0.10.8
+* added matchers for authorized_keys
+
 ## 0.10.6
 * add authorized_keys resource
 
