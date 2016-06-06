@@ -8,7 +8,7 @@ end
 ssh_authorized_keys 'first' do
   user 'test-user'
   type 'ssh-rsa'
-  options 'no-agent-forwarding' => nil, 'no-pty' => nil, :command => 'ls /root'
+  options 'no-agent-forwarding' => nil, 'no-pty' => nil, :command => 'ls /root', :from => '10.10.1.2,10.4.2.1'
   comment 'I left a comment'
   key 'AAAAB3NzaC1yc2EAAAADAQABAAACAQCeCRfSzGWGNsisAZpuFIS0GmHJfgms3g8okwL9h9AvoQPwgyhyri/Wlcz3eyZMvuR4/vwh9FgWpRwLxot7QSGry58GYR9tHkDT9o3m0Hlx28E+K2gbNK5SyFROx5lSfOZkCSyPjBEBmTAadpVYZBJj789oeAT3dDvsxMAqokCIjV5Ey9xBIWKapbsDiTdOHmtDhlrFZfBc75I6tTnW9WGVG6gCQtzyC/tJ2DmWJhtEz9UjxhAOUzazHM2CJ2IlF3SHm+nz7xjTWmGVRzpiellmN+2StmibuFkoZP8L//9v06gDKqp2lNSsi2SJujAsEiKAGtQu6Aa4hdxRFt87m6WSN9lusAazZvnX5s93lAmUAG+wWPnAsujkRSDwv2Ju+GdQFW3ncML7aXFOhIMViG6B98X2h9f3W6XdwQseh10QfvFZ3fAmcAvWvlEM0pGXdfKeFY0LfD7UFxTvzEfqPKnbV6SKlAIMAQ3CX+Q1sZ4nfqopZVJwHDHSL/KQeVKePdyFbZcFVE4L/zruS/fLDqiDMq9yZqMu3WkP5bp4crzguaVwHmrTG4k1XOH5jkMrUj7javMLQHWu56bj0heynhXw7gzXnC/DSgY58/1BPEy7ejsGr0RX2LBRulh84UkV0cjLs8MZyBrhS4dYwyBmtcYlh+OVVVwFimg4ayR7UlkVMw==' # rubocop:disable all
 end
