@@ -11,7 +11,7 @@ end
 
 action :add do
   unless @current_resource.exists?
-    directory ::File.basename(new_resource.path) do
+    directory ::File.dirname(new_resource.path) do
       action :create
       owner  new_resource.user if new_resource.user
       group  new_resource.group if new_resource.group
