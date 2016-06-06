@@ -16,7 +16,7 @@ platforms:
     box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
     run_list:
       - recipe[apt]
-  - name: centos-7.0
+  - name: centos-7.1
 
 suites:
   - name: known_hosts

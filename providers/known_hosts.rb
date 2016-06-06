@@ -46,7 +46,7 @@ def initialize(new_resource, run_context)
   super(new_resource, run_context)
 
   new_resource.path default_or_user_path(new_resource.user) unless new_resource.path
-  if new_resource.host.match(/:/)
+  if new_resource.host =~ /:/
     host, port = new_resource.host.split(':')
     new_resource.host host
     new_resource.port port unless new_resource.port
