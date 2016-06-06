@@ -116,7 +116,7 @@ end
 
 def validate_type(type, source)
   valid = types
-  fail "Invalid Type #{type} in #{source}" unless valid.include? type.to_s
+  raise "Invalid Type #{type} in #{source}" unless valid.include? type.to_s
 end
 
 def validate_options(option, source)
@@ -135,10 +135,10 @@ end
 
 def validate_binary_option(option)
   @binary_options ||= %w(cert-authority no-agent-forwarding no-port-forwarding no-pty no-user-rc no-X11-forwarding)
-  fail "Invalid Option in #{source}: #{option}" unless @binary_options.include? option.to_s
+  raise "Invalid Option in #{source}: #{option}" unless @binary_options.include? option.to_s
 end
 
 def validate_valued_option(option)
   @other_options ||= %w(command environment from permitopen principals tunnel)
-  fail "Invalid Option in #{source}: #{option}" unless @other_options.include? option.to_s
+  raise "Invalid Option in #{source}: #{option}" unless @other_options.include? option.to_s
 end

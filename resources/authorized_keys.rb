@@ -18,4 +18,4 @@ attribute :comment, :kind_of => String
 attribute :user, :kind_of => String, :required => true
 
 attr_accessor :exists
-alias_method  :exists?, :exists
+alias exists? exists
