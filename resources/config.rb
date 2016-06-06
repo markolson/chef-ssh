@@ -8,4 +8,4 @@ attribute :group,   :kind_of => String
 attribute :path,    :kind_of => String
 
 attr_accessor :exists
-alias_method  :exists?, :exists
+alias exists? exists
