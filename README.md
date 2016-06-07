@@ -221,9 +221,9 @@ __* please note that there is no `name` attribute for this resource.  The name y
     <tr>
       <td>type</td>
       <td>
-        A string representing the type of key.  Options include `id-rsa, ssh-dss, ssh-ed25519` and others
+        A string representing the type of key.  Options include `ssh-rsa, ssh-dss, ssh-ed25519` and others
       </td>
-      <td><code>id-rsa</code></td>
+      <td><code>ssh-rsa</code></td>
     </tr>
     <tr>
       <td>options</td>
@@ -258,12 +258,10 @@ __* please note that there is no `name` attribute for this resource.  The name y
 
 #### Example
 
-<syntaxhightlight lang="ruby">
-ssh_authorized_keys "for remote access" do
-  options { 'cert-authority' => nil, :command => '/usr/bin/startup' }
-  user 'admin'
-  key 'AAAAB3NzaC1yc2EAAAADAQABAAACAQDzB76TOkrDRaevO3I1qzosRXliAuYdjcMejHwwL5v2hRqTrBePlMW6nqz8/JgLTzHn/KxzkrKLb0GlpPDrJ1KByWGYZsfydUfv7n1+5ogoA7UW7dUc4DoQtGPuy4Xe0enr88VfALlT11aWKAw8K/I39zWiPvJNX3Mks0f3/3smjLaQEnDWWWiawp5YgzJmyzsqZFZrrFCUgv7AP1EjZofWUcRvYEEjMhKsK+G2H2VCN7MpH0cJ97E0bKNQjHBrwGyMLQZUOndGakCuOuTLpikOXSpUUz5LwqCiRIj6iUtWevwk+AYLZwxPYQpCxFceVFDhPDaJQ85vweSq+HEg7hRujq9jO7vM9LIgjqg7fwQ2Ql6zO9NjXv2UalzBi0H2AbKT1V/PpNufPgolyb/dK7Jqpqu7Ytggctl2fGyLe8yVaC9gD+/BBeCl82LZI142kdXmf4WYcZgOgcRgGJrbSZjeMzX6zZpiD1AG3T7xyEn2twmC/TqptmQEAG2BBzGum+S6pU0rnOt2UJngRnviK2vptAWtRlSlsopySOXv+VbqUXhRjHRT/+2nq5Q4BWcjsZaaoo1uWh2glATRnGK995A1zJ3gWrBA+IaC6stKzjSG0KPwLjzHfPKbWjDX76D/qdo0qBN5hBiHDRfmiNqpNYS9NHACDZNVPBS5N1d5BUkyKw=='
-  type 'id-rsa'
-  comment 'gdidy@coolman.com'
-end
-</syntaxhighlight>
+    ssh_authorized_keys "for remote access" do
+      options { 'cert-authority' => nil, :command => '/usr/bin/startup' }
+      user 'admin'
+      key 'AAAAB3NzaC1yc2EAAAADAQABAAACAQDzB76TOkrDRaevO3I1qzosRXliAuYdjcMejHwwL5v2hRqTrBePlMW6nqz8/JgLTzHn/KxzkrKLb0GlpPDrJ1KByWGYZsfydUfv7n1+5ogoA7UW7dUc4DoQtGPuy4Xe0enr88VfALlT11aWKAw8K/I39zWiPvJNX3Mks0f3/3smjLaQEnDWWWiawp5YgzJmyzsqZFZrrFCUgv7AP1EjZofWUcRvYEEjMhKsK+G2H2VCN7MpH0cJ97E0bKNQjHBrwGyMLQZUOndGakCuOuTLpikOXSpUUz5LwqCiRIj6iUtWevwk+AYLZwxPYQpCxFceVFDhPDaJQ85vweSq+HEg7hRujq9jO7vM9LIgjqg7fwQ2Ql6zO9NjXv2UalzBi0H2AbKT1V/PpNufPgolyb/dK7Jqpqu7Ytggctl2fGyLe8yVaC9gD+/BBeCl82LZI142kdXmf4WYcZgOgcRgGJrbSZjeMzX6zZpiD1AG3T7xyEn2twmC/TqptmQEAG2BBzGum+S6pU0rnOt2UJngRnviK2vptAWtRlSlsopySOXv+VbqUXhRjHRT/+2nq5Q4BWcjsZaaoo1uWh2glATRnGK995A1zJ3gWrBA+IaC6stKzjSG0KPwLjzHfPKbWjDX76D/qdo0qBN5hBiHDRfmiNqpNYS9NHACDZNVPBS5N1d5BUkyKw=='
+      type 'ssh-rsa'
+      comment 'gdidy@coolman.com'
+    end
