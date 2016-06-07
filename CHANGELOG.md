@@ -1,10 +1,12 @@
 # CHANGELOG for ssh
 
+## 0.10.16
+* #58 fix deprication warning in default value of provider (thanks to @CloCkWeRX)
+* #59 - fix known_hosts diretctory creation (thanks to @atward)
+
 ## 0.10.14
 * #54 fix issues in readme (Thanks to @javierav)
 * #57 remove un-needed conditional (thanks to @elser82)
-* #58 fix deprication warning in default value of provider (thanks to @CloCkWeRX)
-* #59 - fix known_hosts diretctory creation (thanks to @atward)
 * several updates to get rubocop and foodcritic happy
 
 ## 0.10.12
