@@ -19,10 +19,9 @@ ClassLength:
 MethodLength:
   Max: 25
   Severity: refactor
-SingleSpaceBeforeFirstArg:
+SpaceBeforeFirstArg:
   Enabled: false
 AbcSize:
   Enabled: false
 Documentation:
   Enabled: false
-

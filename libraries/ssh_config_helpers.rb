@@ -12,12 +12,12 @@ class Chef
         File.expand_path(path).eql? File.expand_path(node['ssh']['config_path'])
       end
 
-      def parse_file(path)
+      def parse_file(path) # rubocop:disable Style/CyclomaticComplexity
         entries = {}
         return entries unless ::File.exist?(path)
         name = nil
         IO.foreach(path) do |line|
-          next if line.match(/^\s*(#|\r?\n|\s*$)/) # skip lines with only comments or whitespace
+          next if line =~ /^\s*(#|\r?\n|\s*$)/ # skip lines with only comments or whitespace
 
           check_name = parse_name(line)
           next if check_name && (name = check_name) && (entries[name] = {})
@@ -31,11 +31,11 @@ class Chef
 
       def to_config(existing_entries)
         existing_entries.map do |name, options|
-          if options
-            body = options.map { |key, value| "  #{key} #{value}" }.join("\n")
-          else
-            body = ''
-          end
+          body = if options
+                   options.map { |key, value| "  #{key} #{value}" }.join("\n")
+                 else
+                   ''
+                 end
           ["Host #{name}", body].join("\n")
         end.join("\n\n") + "\n"
       end

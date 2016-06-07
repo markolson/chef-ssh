@@ -11,7 +11,7 @@ end
 
 action :add do
   unless @current_resource.exists?
-    directory ::File.basename(new_resource.path) do
+    directory ::File.dirname(new_resource.path) do
       action :create
       owner  new_resource.user if new_resource.user
       group  new_resource.group if new_resource.group
@@ -46,7 +46,7 @@ def initialize(new_resource, run_context)
   super(new_resource, run_context)
 
   new_resource.path default_or_user_path(new_resource.user) unless new_resource.path
-  if new_resource.host.match(/:/)
+  if new_resource.host =~ /:/
     host, port = new_resource.host.split(':')
     new_resource.host host
     new_resource.port port unless new_resource.port
