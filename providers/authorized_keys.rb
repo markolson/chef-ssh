@@ -26,6 +26,7 @@ action :update do
   current[:options] = new_resource.options
   current[:type] = new_resource.type
   current[:comment] = new_resource.comment
+  current[:text] = nil
   update_file
 end
 
@@ -52,17 +53,21 @@ end
 
 def format_lines
   @lines.collect do |line|
-    if line[:options].nil?
-      joined = ''
+    if line[:text].nil?
+      if line[:options].nil?
+        joined = ''
+      else
+        joined = line[:options].collect do |key, value|
+          (value.nil? || value.empty?) ? key.to_s : "#{key}=\"#{value}\""
+        end.join(',')
+      end
+      joined << ' ' unless joined.empty?
+      joined << line[:type] << ' ' << line[:key]
+      line[:comment] && (joined << ' ' << line[:comment])
+      joined
     else
-      joined = line[:options].collect do |key, value|
-        (value.nil? || value.empty?) ? key.to_s : "#{key}=\"#{value}\""
-      end.join(',')
+      line[:text]
     end
-    joined << ' ' unless joined.empty?
-    joined << line[:type] << ' ' << line[:key]
-    line[:comment] && (joined << ' ' << line[:comment])
-    joined
   end.join("\n") + "\n"
 end
 
@@ -86,14 +91,18 @@ protected
 
 def parse(current)
   current.reduce([]) do |memo, row|
-    line = {}
-    # split on whitespace that is not inside of quotes
-    fields = row.split(/(?!\B"[^"]*)\s(?![^"]*"\B)/)
-    line[:options] = parse_options(fields.shift) unless types.include? fields[0]
-    validate_type(fields[0], @path)
-    line[:type] = fields[0]
-    line[:key] = fields[1]
-    line[:comment] = fields[2..-1].join(' ') if fields[2]
+    row.chomp!
+    line = {text: row}
+
+    unless row == "" or row.start_with?("#")
+      # split on whitespace that is not inside of quotes
+      fields = row.split(/(?!\B"[^"]*)\s(?![^"]*"\B)/)
+      line[:options] = parse_options(fields.shift) unless types.include? fields[0]
+      validate_type(fields[0], @path)
+      line[:type] = fields[0]
+      line[:key] = fields[1]
+      line[:comment] = fields[2..-1].join(' ') if fields[2]
+    end
     memo << line
   end
 end
@@ -127,18 +136,18 @@ def validate_options(option, source)
   option = option.split('=') if option.is_a? String
 
   if option[1].nil? || option[1].empty?
-    validate_binary_option option[0]
+    validate_binary_option option[0], source
   else
-    validate_valued_option option[0]
+    validate_valued_option option[0], source
   end
 end
 
-def validate_binary_option(option)
+def validate_binary_option(option, source)
   @binary_options ||= %w(cert-authority no-agent-forwarding no-port-forwarding no-pty no-user-rc no-X11-forwarding)
   raise "Invalid Option in #{source}: #{option}" unless @binary_options.include? option.to_s
 end
 
-def validate_valued_option(option)
+def validate_valued_option(option, source)
   @other_options ||= %w(command environment from permitopen principals tunnel)
   raise "Invalid Option in #{source}: #{option}" unless @other_options.include? option.to_s
 end
