@@ -127,18 +127,18 @@ def validate_options(option, source)
   option = option.split('=') if option.is_a? String
 
   if option[1].nil? || option[1].empty?
-    validate_binary_option option[0]
+    validate_binary_option option[0] source
   else
-    validate_valued_option option[0]
+    validate_valued_option option[0] source
   end
 end
 
-def validate_binary_option(option)
+def validate_binary_option(option, source)
   @binary_options ||= %w(cert-authority no-agent-forwarding no-port-forwarding no-pty no-user-rc no-X11-forwarding)
   raise "Invalid Option in #{source}: #{option}" unless @binary_options.include? option.to_s
 end
 
-def validate_valued_option(option)
+def validate_valued_option(option, source)
   @other_options ||= %w(command environment from permitopen principals tunnel)
   raise "Invalid Option in #{source}: #{option}" unless @other_options.include? option.to_s
 end
