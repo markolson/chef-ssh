@@ -76,7 +76,7 @@ end
 
 def load_current_resource
   search = Mixlib::ShellOut.new(
-    "ssh-keygen -H -F #{Shellwords.escape(new_resource.host)} "\
+    "ssh-keygen -F #{Shellwords.escape(new_resource.host)} "\
     "-f #{new_resource.path} | grep 'Host #{new_resource.host} found'"
   )
   search.run_command
