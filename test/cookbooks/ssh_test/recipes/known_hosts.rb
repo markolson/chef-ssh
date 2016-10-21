@@ -23,6 +23,16 @@ ssh_known_hosts 'github.com' do
   port   22
 end
 
+# Simulate multiple converges to test idempotence
+(1..3).step do |n|
+  ssh_known_hosts "altssh.bitbucket.org converge #{n}" do
+    host 'altssh.bitbucket.org'
+    port 443
+    user 'root'
+    key ::TestData.bitbucket_altssh_key
+  end
+end
+
 ssh_known_hosts 'some entry' do
   host 'test_host'
   user 'vagrant'
