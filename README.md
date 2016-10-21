@@ -69,6 +69,13 @@ some of your cookbooks may not be as generous.
       <td><code>nil</code></td>
     </tr>
     <tr>
+      <td>port</td>
+      <td>
+        The host's SSH port
+      </td>
+      <td><code>22</code></td>
+    </tr>
+    <tr>
       <td>hashed</td>
       <td>A Boolean indicating if SSH is configured to use a hashed `known_hosts` file.
       </td>
