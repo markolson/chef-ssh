@@ -127,9 +127,9 @@ def validate_options(option, source)
   option = option.split('=') if option.is_a? String
 
   if option[1].nil? || option[1].empty?
-    validate_binary_option (option[0], source)
+    validate_binary_option(option[0], source)
   else
-    validate_valued_option (option[0], source)
+    validate_valued_option(option[0], source)
   end
 end
 

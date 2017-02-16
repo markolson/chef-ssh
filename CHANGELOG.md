@@ -4,6 +4,8 @@
 * Cleanup tests to get them running again
 * updates for rubocop errors
 * Better handling for custom ssh ports - thanks @stissot
+* handle more than one option in authorized-hosts correctly - thanks @chazzly and @rongshen-daqri
+
 
 ## 0.10.16
 * #58 fix deprication warning in default value of provider (thanks to @CloCkWeRX)
