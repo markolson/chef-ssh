@@ -11,7 +11,8 @@ namespace :lint do
   desc 'Run Chef lint checks'
   FoodCritic::Rake::LintTask.new(:chef) do |t|
     t.options = {
-      :fail_tags => %w(any)
+      :fail_tags => %w(any),
+      :tags => %w(~FC001)
     }
   end
 end
@@ -25,7 +26,8 @@ RSpec::Core::RakeTask.new(:spec)
 
 # Integration tests. Kitchen.ci
 desc 'Run Test Kitchen'
-task :integration do
+task :integration, [:mode] do |_, args|
+  args.with_defaults(:mode => :always)
   Kitchen.logger = Kitchen.default_file_logger
   Kitchen::Config.new.instances.each do |instance|
     instance.test(:always)
@@ -33,10 +35,10 @@ task :integration do
 end
 
 # Default
-task :default => %w(all)
+task :default => %w(test)
 
-desc 'Run only the reasonably fast tests (lint, spec, and fast kitchen tests'
+desc 'Run only the fastest tests (lint and spec tests)'
 task :fast => %w(lint spec)
 
 desc 'Run everything we have'
-task :all => %w(lint spec integration)
+task :test => %w(fast integration)

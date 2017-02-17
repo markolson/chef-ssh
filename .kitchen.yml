@@ -1,22 +1,27 @@
 ---
-driver:
-  name: vagrant
-
-driver_config:
-  require_chef_omnibus: '11.16.4'
-
 provisioner:
   name: chef_zero
-  require_chef_omnibus: true
-  chef_omnibus_url: https://www.getchef.com/chef/install.sh
+  client_rb:
+    node_name: 'test-node-name'
+    no_lazy_load: true
+
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: 'latest'
+  customize:
+    cpus: 2
+    memory: 2048
+    cpuexecutioncap: 75
 
 platforms:
   - name: ubuntu-12.04
-    box: opscode-ubuntu-12.04
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
+    driver_config:
+      box: 'ubuntu/precise64'
     run_list:
       - recipe[apt]
-  - name: centos-7.1
+  - name: centos-7.2
+    driver_config:
+      box: 'centos/7'
 
 suites:
   - name: known_hosts
