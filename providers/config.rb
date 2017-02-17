@@ -35,7 +35,7 @@ def create_directory
   d = directory ::File.dirname(@path)
   d.owner     @user
   d.group     @group if @group
-  d.mode      default?(@path) ? 00755 : 00700
+  d.mode      default?(@path) ? 0o0755 : 0o0700
   d.path      ::File.dirname(@path)
   d.recursive true
 end
@@ -44,7 +44,7 @@ def create_file
   f = file @path
   f.owner   @user if @user
   f.group   @group if @group
-  f.mode    default?(@path) ? 00644 : 00600
+  f.mode    default?(@path) ? 0o0644 : 0o0600
   f.content "# Created by Chef for #{node.name}\n\n#{to_config(@existing_entries)}"
 end
 

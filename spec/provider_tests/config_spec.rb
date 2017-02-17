@@ -1,8 +1,9 @@
 require 'spec_helper'
 
+# rubocop:disable Metrics/BlockLength
 describe 'ssh_config resource' do
   let(:chef_run) do
-    runner = ChefSpec::SoloRunner.new(:step_into => :ssh_config)
+    runner = ChefSpec::SoloRunner.new(:platform => 'ubuntu', :version => '12.04', :step_into => 'ssh_config')
     runner.converge('ssh_test::config')
   end
 
@@ -27,7 +28,7 @@ describe 'ssh_config resource' do
 
   let(:common_end) do
     content = []
-    content << '# Created by Chef for chefspec.local'
+    content << '# Created by Chef for fauxhai.local'
     content << ''
   end
 
@@ -70,7 +71,7 @@ describe 'ssh_config resource' do
   end
 
   before do
-    allow(::File).to receive(:'exist?')
+    allow(::File).to receive(:'exist?').and_call_original
     allow(::File).to receive(:'exist?').with(vagrant_config).and_return(true)
     allow(::File).to receive(:'exist?').with(default_config).and_return(true)
     allow(::File).to receive(:'exist?').with(test_config).and_return(true)
@@ -174,7 +175,7 @@ describe 'ssh_config resource' do
     expect(chef_run).to create_file(vagrant_config).with(
       :owner => 'vagrant',
       :group => 'vagrant',
-      :mode => 00600
+      :mode => 0o0600
     ).with_content(
       (common_end + github_and_partial_end).join("\n")
     )
@@ -184,7 +185,7 @@ describe 'ssh_config resource' do
     expect(chef_run).to create_file(default_config).with(
       :owner => 'root',
       :group => 'root',
-      :mode => 00644
+      :mode => 0o0644
     ).with_content(
       (common_end + github_and_partial_end).join("\n")
     )
@@ -194,7 +195,7 @@ describe 'ssh_config resource' do
     expect(chef_run).to create_directory(::File.dirname(default_config)).with(
       :owner => 'root',
       :group => 'root',
-      :mode => 00755
+      :mode => 0o0755
     )
   end
 
@@ -202,7 +203,7 @@ describe 'ssh_config resource' do
     expect(chef_run).to create_directory(::File.dirname(vagrant_config)).with(
       :owner => 'vagrant',
       :group => 'vagrant',
-      :mode => 00700
+      :mode => 0o0700
     )
   end
 
@@ -217,7 +218,7 @@ describe 'ssh_config resource' do
       expect(chef_run).to create_file(test_config).with(
         :owner => test_user,
         :group => test_group,
-        :mode => 00600
+        :mode => 0o0600
       )
     end
   end

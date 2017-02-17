@@ -39,12 +39,12 @@ def update_file
   directory ::File.dirname(@path) do
     action :create
     owner  new_resource.user
-    mode   00700
+    mode   0o0700
   end
 
   file @path do
     action :create
-    mode   00600
+    mode   0o0600
     owner  new_resource.user
     content format_lines
   end
@@ -52,13 +52,13 @@ end
 
 def format_lines
   @lines.collect do |line|
-    if line[:options].nil?
-      joined = ''
-    else
-      joined = line[:options].collect do |key, value|
-        (value.nil? || value.empty?) ? key.to_s : "#{key}=\"#{value}\""
-      end.join(',')
-    end
+    joined = if line[:options].nil?
+               ''
+             else
+               line[:options].collect do |key, value|
+                 value.nil? || value.empty? ? key.to_s : "#{key}=\"#{value}\""
+               end.join(',')
+             end
     joined << ' ' unless joined.empty?
     joined << line[:type] << ' ' << line[:key]
     line[:comment] && (joined << ' ' << line[:comment])
