@@ -1,5 +1,12 @@
 # CHANGELOG for ssh
 
+## 0.10.18
+* Cleanup tests to get them running again
+* updates for rubocop errors
+* Better handling for custom ssh ports - thanks @stissot
+* handle more than one option in authorized-hosts correctly - thanks @chazzly and @rongshen-daqri
+* Handle hashed vs non-hashed existing keys correctly - thanks @balous
+
 ## 0.10.16
 * #58 fix deprication warning in default value of provider (thanks to @CloCkWeRX)
 * #59 - fix known_hosts diretctory creation (thanks to @atward)

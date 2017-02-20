@@ -15,12 +15,12 @@ action :add do
       action :create
       owner  new_resource.user if new_resource.user
       group  new_resource.group if new_resource.group
-      mode   new_resource.user ? 00700 : 00755
+      mode   new_resource.user ? 0o0700 : 0o0755
     end
 
     file new_resource.path do
       action :create
-      mode   new_resource.user ? 00600 : 00644
+      mode   new_resource.user ? 0o0600 : 0o0644
       owner  new_resource.user if new_resource.user
       group  new_resource.group if new_resource.group
     end
@@ -28,7 +28,7 @@ action :add do
     execute "add known_host entry for #{new_resource.host}" do
       command "echo '#{new_resource.key}' >> #{new_resource.path}"
       user    new_resource.user if new_resource.user
-      umask   new_resource.user ? 0077 : 0022
+      umask   new_resource.user ? 0o077 : 0o022
     end
   end
 end
@@ -38,7 +38,7 @@ action :remove do
   execute "remove known_host entry for #{new_resource.host}" do
     command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
     user    new_resource.user if new_resource.user
-    umask   new_resource.user ? 0077 : 0022
+    umask   new_resource.user ? 0o077 : 0o022
   end
 end
 
@@ -75,10 +75,17 @@ def load_key_if_needed
 end
 
 def load_current_resource
-  search = Mixlib::ShellOut.new(
-    "ssh-keygen -H -F #{Shellwords.escape(new_resource.host)} "\
-    "-f #{new_resource.path} | grep 'Host #{new_resource.host} found'"
-  )
+  matching_host = new_resource.port == 22 ? new_resource.host : "[#{new_resource.host}]:#{new_resource.port}"
+
+  cmd =
+    if new_resource.key.nil?
+      "ssh-keygen #{new_resource.hashed ? '-H ' : ''} -F #{Shellwords.escape(matching_host)} "\
+      "-f #{new_resource.path} | grep -F 'Host #{matching_host} found'"
+    else
+      "grep -F '#{new_resource.key}' '#{new_resource.path}'"
+    end
+
+  search = Mixlib::ShellOut.new(cmd)
   search.run_command
   @current_resource = Chef::Resource::SshKnownHosts.new(@new_resource.name)
   @current_resource.exists = search.status.success?

@@ -19,7 +19,7 @@ class Chef
       end
 
       def pwent_for(uid)
-        uid.is_a?(Fixnum) ? Etc.getpwuid(uid) : Etc.getpwnam(uid)
+        uid.is_a?(Integer) ? Etc.getpwuid(uid) : Etc.getpwnam(uid)
       end
     end
   end

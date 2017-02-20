@@ -21,6 +21,10 @@ describe command('ssh-keygen -F github.com -f /home/vagrant/.ssh/known_hosts') d
   its(:stdout) { should match(/found/) }
 end
 
+describe command('ssh-keygen -F [altssh.bitbucket.org]:443 -f /root/.ssh/known_hosts | grep found | wc -l') do
+  its(:stdout) { should match(/1/) }
+end
+
 describe file('/home/vagrant/.ssh/known_hosts') do
   it { should be_file }
   its(:content) { should match(/\[dummy6\]\:234 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwDBTE5H\+DpOWUv3CPtOo/) }
