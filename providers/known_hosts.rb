@@ -80,9 +80,9 @@ def load_current_resource
   cmd =
     if new_resource.key.nil?
       "ssh-keygen #{new_resource.hashed ? '-H ' : ''} -F #{Shellwords.escape(matching_host)} "\
-      "-f #{new_resource.path} | grep 'Host #{matching_host} found'"
+      "-f #{new_resource.path} | grep -F 'Host #{matching_host} found'"
     else
-      "cat '#{new_resource.path}' | grep '#{new_resource.key}'"
+      "grep -F '#{new_resource.key}' '#{new_resource.path}'"
     end
 
   search = Mixlib::ShellOut.new(cmd)

@@ -27,6 +27,7 @@ end
 (1..3).step do |n|
   ssh_known_hosts "altssh.bitbucket.org converge #{n}" do
     host 'altssh.bitbucket.org'
+    hashed true
     port 443
     user 'root'
     key ::TestData.bitbucket_altssh_key
