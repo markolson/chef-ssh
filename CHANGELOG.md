@@ -1,5 +1,8 @@
 # CHANGELOG for ssh
 
+## 0.10.20
+* allow full line comments on authorized_keys
+
 ## 0.10.18
 * Cleanup tests to get them running again
 * updates for rubocop errors

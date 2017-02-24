@@ -51,19 +51,21 @@ def update_file
 end
 
 def format_lines
-  @lines.collect do |line|
-    joined = if line[:options].nil?
-               ''
-             else
-               line[:options].collect do |key, value|
-                 value.nil? || value.empty? ? key.to_s : "#{key}=\"#{value}\""
-               end.join(',')
-             end
-    joined << ' ' unless joined.empty?
-    joined << line[:type] << ' ' << line[:key]
-    line[:comment] && (joined << ' ' << line[:comment])
-    joined
-  end.join("\n") + "\n"
+  @lines.collect { |line| line.is_a?(String) ? line : construct_line(line) }.join("\n") + "\n"
+end
+
+def construct_line(line)
+  joined = if line[:options].nil?
+             ''
+           else
+             line[:options].collect do |key, value|
+               value.nil? || value.empty? ? key.to_s : "#{key}=\"#{value}\""
+             end.join(',')
+           end
+  joined << ' ' unless joined.empty?
+  joined << line[:type] << ' ' << line[:key]
+  line[:comment] && (joined << ' ' << line[:comment])
+  joined
 end
 
 def initialize(new_resource, run_context)
@@ -77,7 +79,7 @@ end
 def load_current_resource
   @lines = ::File.exist?(@path) ? parse(::IO.readlines(@path)) : []
 
-  current_line = @lines.find { |line| line[:key] == @new_resource.key }
+  current_line = @lines.find { |line| line.is_a?(Hash) && line[:key] == @new_resource.key }
   @current_resource = Chef::Resource::SshKnownHosts.new(@new_resource.name)
   @current_resource.exists = current_line
 end
@@ -86,15 +88,19 @@ protected
 
 def parse(current)
   current.reduce([]) do |memo, row|
-    line = {}
-    # split on whitespace that is not inside of quotes
-    fields = row.split(/(?!\B"[^"]*)\s(?![^"]*"\B)/)
-    line[:options] = parse_options(fields.shift) unless types.include? fields[0]
-    validate_type(fields[0], @path)
-    line[:type] = fields[0]
-    line[:key] = fields[1]
-    line[:comment] = fields[2..-1].join(' ') if fields[2]
-    memo << line
+    if /^#/ =~ row || row.strip.empty?
+      memo << row
+    else
+      line = {}
+      # split on whitespace that is not inside of quotes
+      fields = row.split(/(?!\B"[^"]*)\s(?![^"]*"\B)/)
+      line[:options] = parse_options(fields.shift) unless types.include? fields[0]
+      validate_type(fields[0], @path)
+      line[:type] = fields[0]
+      line[:key] = fields[1]
+      line[:comment] = fields[2..-1].join(' ') if fields[2]
+      memo << line
+    end
   end
 end
 

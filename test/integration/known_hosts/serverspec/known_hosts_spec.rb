@@ -7,6 +7,7 @@ describe file('/etc/ssh/ssh_known_hosts') do
   its(:content) { should include(TestData.github_key) }
   its(:content) { should include(TestData.dummy1_key) }
   its(:content) { should_not match(/dummy2/) }
+  its(:content) { is_expected.to contain('# this is a comment') }
 end
 
 describe file('/home/vagrant/.ssh/known_hosts') do
@@ -14,6 +15,7 @@ describe file('/home/vagrant/.ssh/known_hosts') do
   it { should be_readable }
   its(:content) { should include(TestData.dummy3_key) }
   its(:content) { should_not match(/dummy4/) }
+  its(:content) { is_expected.to contain('# this is a comment') }
 end
 
 describe command('ssh-keygen -F github.com -f /home/vagrant/.ssh/known_hosts') do

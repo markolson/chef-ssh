@@ -3,13 +3,13 @@
 include_recipe 'ssh'
 
 file '/etc/ssh/ssh_known_hosts' do
-  content "#{::TestData.dummy1_key}\n#{::TestData.dummy2_key}\n"\
+  content "# this is a comment\n#{::TestData.dummy1_key}\n#{::TestData.dummy2_key}\n"\
           "#{::TestData.dummy6_key}\n"
   action :create
 end
 
 file '/home/vagrant/.ssh/known_hosts' do
-  content "#{::TestData.dummy3_key}\n#{::TestData.dummy4_key}\n"
+  content "#{::TestData.dummy3_key}\n# this is a comment\n#{::TestData.dummy4_key}\n"
   action :create
 end
 
