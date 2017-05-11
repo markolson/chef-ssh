@@ -80,7 +80,7 @@ def load_current_resource
   @lines = ::File.exist?(@path) ? parse(::IO.readlines(@path)) : []
 
   current_line = @lines.find { |line| line.is_a?(Hash) && line[:key] == @new_resource.key }
-  @current_resource = Chef::Resource::SshKnownHosts.new(@new_resource.name)
+  @current_resource = Chef::Resource.resource_for_node(:ssh_known_hosts, node).new(@new_resource.name)
   @current_resource.exists = current_line
 end
 

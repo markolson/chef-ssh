@@ -87,7 +87,7 @@ def load_current_resource
 
   search = Mixlib::ShellOut.new(cmd)
   search.run_command
-  @current_resource = Chef::Resource::SshKnownHosts.new(@new_resource.name)
+  @current_resource = Chef::Resource.resource_for_node(:ssh_known_hosts, node).new(@new_resource.name)
   @current_resource.exists = search.status.success?
 end
 
