@@ -7,7 +7,7 @@ provisioner:
 
 driver_plugin: vagrant
 driver_config:
-  require_chef_omnibus: 'latest'
+  require_chef_omnibus: '12.19' #'latest'
   customize:
     cpus: 2
     memory: 2048

@@ -1,5 +1,9 @@
 # CHANGELOG for ssh
 
+## 0.10.22
+* #71 add chef13 compatibility (does not break chef 12 compatibility) thanks to tecnocratica
+* fix new rubocop issues.
+
 ## 0.10.20
 * allow full line comments on authorized_keys
 

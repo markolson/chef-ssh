@@ -1,8 +1,8 @@
 user 'test-user' do
   manage_home true
-  supports :manage_home => true
+  manage_home true
   home '/home/test-user'
-  action [:create, :manage]
+  action %i[create manage]
 end
 
 directory '/home/test-user/.ssh' do

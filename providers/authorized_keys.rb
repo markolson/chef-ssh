@@ -117,7 +117,7 @@ def parse_options(text)
 end
 
 def types
-  @types ||= %w(ssh-rsa ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519 ssh-dss)
+  @types ||= %w[ssh-rsa ecdsa-sha2-nistp256 ecdsa-sha2-nistp384 ecdsa-sha2-nistp521 ssh-ed25519 ssh-dss]
 end
 
 def validate_type(type, source)
@@ -140,11 +140,11 @@ def validate_options(option, source)
 end
 
 def validate_binary_option(option, source)
-  @binary_options ||= %w(cert-authority no-agent-forwarding no-port-forwarding no-pty no-user-rc no-X11-forwarding)
+  @binary_options ||= %w[cert-authority no-agent-forwarding no-port-forwarding no-pty no-user-rc no-X11-forwarding]
   raise "Invalid Option in #{source}: #{option}" unless @binary_options.include? option.to_s
 end
 
 def validate_valued_option(option, source)
-  @other_options ||= %w(command environment from permitopen principals tunnel)
+  @other_options ||= %w[command environment from permitopen principals tunnel]
   raise "Invalid Option in #{source}: #{option}" unless @other_options.include? option.to_s
 end

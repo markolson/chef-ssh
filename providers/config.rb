@@ -54,6 +54,6 @@ def load_current_resource
   @path = new_resource.path || default_or_user_path(new_resource.user)
   @existing_entries = parse_file @path
 
-  @current_resource = Chef::Resource::resource_for_node(:ssh_config, node).new(@new_resource.host)
+  @current_resource = Chef::Resource.resource_for_node(:ssh_config, node).new(@new_resource.host)
   @current_resource.exists = @existing_entries.key? @new_resource.host
 end
