@@ -10,7 +10,7 @@ action :add do
   unless @new_resource.options.eql? @existing_entries[new_resource.host]
     @existing_entries[@new_resource.host] = @new_resource.options
 
-    converge_by "Adding {@new_resource.host} to #{@path} with #{new_resource.options.inspect}" do
+    converge_by "Adding #{@new_resource.host} to #{@path} with #{new_resource.options.inspect}" do
       create_directory
       create_file
     end
