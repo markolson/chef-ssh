@@ -1,5 +1,8 @@
 # CHANGELOG for ssh
 
+## 0.10.24
+* merged #74 to fix a typo
+
 ## 0.10.22
 * #71 add chef13 compatibility (does not break chef 12 compatibility) thanks to tecnocratica
 * fix new rubocop issues.
