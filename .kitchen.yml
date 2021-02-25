@@ -7,16 +7,15 @@ provisioner:
 
 driver_plugin: vagrant
 driver_config:
-  require_chef_omnibus: '12.19' #'latest'
   customize:
     cpus: 2
     memory: 2048
     cpuexecutioncap: 75
 
 platforms:
-  - name: ubuntu-12.04
+  - name: ubuntu-20.04
     driver_config:
-      box: 'ubuntu/precise64'
+      box: 'ubuntu/focal64'
     run_list:
       - recipe[apt]
   - name: centos-7.2
