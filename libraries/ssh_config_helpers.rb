@@ -23,7 +23,7 @@ class Chef
           next if check_name && (name = check_name) && (entries[name] = {})
 
           key, entry = parse_line(line)
-          next unless entry
+          next unless entry && name
           entries[name][key] = entry
         end
         entries

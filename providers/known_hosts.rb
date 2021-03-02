@@ -28,7 +28,6 @@ action :add do
     execute "add known_host entry for #{new_resource.host}" do
       command "echo '#{new_resource.key}' >> #{new_resource.path}"
       user    new_resource.user if new_resource.user
-      umask   new_resource.user ? 0o077 : 0o022
     end
   end
 end
@@ -38,7 +37,6 @@ action :remove do
   execute "remove known_host entry for #{new_resource.host}" do
     command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
     user    new_resource.user if new_resource.user
-    umask   new_resource.user ? 0o077 : 0o022
   end
 end
 
@@ -80,7 +78,7 @@ def load_current_resource
   cmd =
     if new_resource.key.nil?
       "ssh-keygen #{new_resource.hashed ? '-H ' : ''} -F #{Shellwords.escape(matching_host)} "\
-      "-f #{new_resource.path} | grep -F 'Host #{matching_host} found'"
+      "-f #{new_resource.path} | grep ."
     else
       "grep -F '#{new_resource.key}' '#{new_resource.path}'"
     end

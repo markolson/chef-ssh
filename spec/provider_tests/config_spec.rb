@@ -3,7 +3,7 @@ require 'spec_helper'
 # rubocop:disable Metrics/BlockLength
 describe 'ssh_config resource' do
   let(:chef_run) do
-    runner = ChefSpec::SoloRunner.new(:platform => 'ubuntu', :version => '12.04', :step_into => 'ssh_config')
+    runner = ChefSpec::SoloRunner.new(:platform => 'ubuntu', :version => '20.04', :step_into => 'ssh_config')
     runner.converge('ssh_test::config')
   end
 
